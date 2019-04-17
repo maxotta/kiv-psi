@@ -1,0 +1,26 @@
+#
+# Install SNMP stuff
+#
+
+- name: install Net SNMP
+  yum:
+    name: net-snmp
+    state: present
+
+- name: install Net SNMP utilities
+  yum:
+    name: net-snmp-utils
+    state: present
+
+- name: copy SNMPd configuration file template
+  template:
+    src: snmpd.conf.j2
+    dest: /etc/snmp/snmpd.conf
+    backup: yes
+
+- name: activate SNMP daemon
+  systemd:
+    name: snmpd
+    enabled: yes
+    state: started
+    daemon_reload: yes
