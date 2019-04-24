@@ -1,0 +1,19 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+  <label>Search:
+    <input [(ngModel)]="searchText" placeholder="Country name"/>
+  </label>
+  <button (click)="performSearch()">Search</button>
+</div>
+<div>
+  <br />
+  RESULTS:
+  <ul>
+    <li *ngFor="let country of results">
+      {{ country.nativeName }}
+    </li>
+  </ul>
+</div>
