@@ -17,11 +17,13 @@ ENV['ANSIBLE_ROLES_PATH'] = "../ansible/roles/"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.synced_folder ".", "/vagrant"
-    config.vm.box = "geerlingguy/centos7"
+    config.vm.box = "geerlingguy/centos8"
     config.ssh.insert_key = false
 
-    config.vm.provision "ansible" do |ansible|
+    config.vm.provision "ansible_local" do |ansible|
         ansible.compatibility_mode = "2.0"
+        ansible.install_mode = "pip"
+        ansible.version = "2.2.1.0"
         ansible.playbook = "ansible-provision.yml"
     end
 
