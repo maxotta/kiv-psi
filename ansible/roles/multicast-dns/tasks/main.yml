@@ -1,16 +1,11 @@
 #
 - name: Install mDNS daemon
-  yum:
+  dnf:
     name: avahi
     state: present
 
-- name: Install mDNS tools
-  yum:
-    name: avahi-tools
-    state: present
-
 - name: Name services switch for mDNS
-  yum:
+  dnf:
     name: nss-mdns
     state: present
 

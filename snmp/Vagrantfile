@@ -12,19 +12,24 @@ node_name = "node"
 node_cpus = 1
 node_mem = 512
 
-ENV['ANSIBLE_ROLES_PATH'] = "../ansible/roles/"
+# ENV['ANSIBLE_ROLES_PATH'] = "../ansible/roles/"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-    config.vm.synced_folder ".", "/vagrant"
+    config.vm.synced_folder "../", "/shared-folder"
     config.vm.box = "geerlingguy/centos8"
     config.ssh.insert_key = false
 
+    # workaround until pip3 install mode gets available for the ansible_local provisioner
+    config.vm.provision "shell", inline: "dnf makecache && dnf -y install epel-release && dnf makecache && dnf -y install ansible"
+
     config.vm.provision "ansible_local" do |ansible|
         ansible.compatibility_mode = "2.0"
-        ansible.install_mode = "pip"
-        ansible.version = "2.2.1.0"
-        ansible.playbook = "ansible-provision.yml"
+        ansible.install = false # workaround
+        #ansible.install_mode = "pip"
+        #ansible.version = "2.2.1.0"
+        ansible.provisioning_path = "/shared-folder/ansible"
+        ansible.playbook = "snmp-provisioning.yml"
     end
 
     (1..cluster_nodes).each do |i|
@@ -46,4 +51,3 @@ end
 #
 # EOF
 #
-
