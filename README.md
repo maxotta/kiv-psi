@@ -32,6 +32,8 @@ In the case of GNS3 it is better to bring up the GNS3 virtual machine and then i
 
 ![GNS3ui-server.png](images/GNS3ui-server.png)
 
+⚠️ **IMPORTANT NOTE:** Don't forget the start the GNS3 VM each time you want to work with GNS3 ! ⚠️
+
 The GNS3 software architecture is pretty flexible, you can connect to several server and it has even a Web UI!
 
 ```
