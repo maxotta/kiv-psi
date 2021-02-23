@@ -1,0 +1,41 @@
+VAGRANTFILE_API_VERSION = "2"
+
+cluster_name = "PSI"
+cluster_nodes = 1
+cluster_subnet = "10.0.1."
+
+node_name = "node"
+node_cpus = 1
+node_mem = 512
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    config.vm.synced_folder ".", "/shared-folder"
+    config.vm.box = "geerlingguy/centos8"
+    config.ssh.insert_key = false
+
+    config.vm.provision "shell", inline: <<-SHELL
+         yum -q -y install epel-release
+         yum -q -y install mc
+    SHELL
+
+    (1..cluster_nodes).each do |i|
+        ip_addr = "#{cluster_subnet}#{100 + i}"
+        hostname = "#{node_name}-#{i}"
+        vmname = "#{cluster_name}_#{hostname}"
+        config.vm.define "#{hostname}" do |cfg|
+            cfg.vm.post_up_message = "VM #{node_name}-#{i} IP: #{ip_addr} up and ready. You can access your local folder at /shared-folder inside the VM."
+            cfg.vm.network "private_network", ip: "#{ip_addr}"
+            cfg.vm.hostname = "#{hostname}"
+            cfg.vm.provider :virtualbox do |vb|
+                vb.name = "#{vmname}"
+                vb.customize ["modifyvm", :id, "--memory", node_mem, "--cpus", node_cpus, "--hwvirtex", "on"]
+            end # end provider
+        end # end config
+    end # end cluster
+end # end Vagrant
+
+#
+# EOF
+#
+
