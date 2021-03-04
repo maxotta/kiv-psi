@@ -1,7 +1,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 cluster_name = "PSI"
-cluster_nodes = 1
+cluster_nodes = ENV['CLUSTER_NODES'].to_i || 1
 cluster_subnet = "10.0.1."
 
 node_name = "node"
@@ -10,13 +10,14 @@ node_mem = 512
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-    config.vm.synced_folder ".", "/shared-folder"
+    config.vm.synced_folder "..", "/shared-folder"
     config.vm.box = "geerlingguy/centos8"
     config.ssh.insert_key = false
 
     config.vm.provision "shell", inline: <<-SHELL
-         yum -q -y install epel-release
-         yum -q -y install mc
+         dnf -q -y install epel-release
+         dnf -q -y group install "Development Tools"
+         dnf -q -y install mc
     SHELL
 
     (1..cluster_nodes).each do |i|
