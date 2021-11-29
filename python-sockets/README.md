@@ -5,6 +5,6 @@
 * **mcast-server.py** - example receiver of UDP messages sent to 224.0.0.99
 * **udp-client-dns.py** - example showing how a DNS query works
 * **tcp-server.py** - TCP server listening for incomming connections example
-* **tcp-cliena.py** - TCP client showing communication with a TCP server.
+* **tcp-client.py** - TCP client showing communication with a TCP server.
 
 

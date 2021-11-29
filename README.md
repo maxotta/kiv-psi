@@ -51,3 +51,10 @@ The GNS3 software architecture is pretty flexible, you can connect to several se
                                                     +--------+
 ```
 
+## Provided examples
+
+* [***Simple UDP***](udp-simple) - examples of a simple UDP server and client.
+* [***Python Socket API***](python-sockets) - several basic examples showing the use of the Python Socket API.
+* [***REST API***](rest-api) - examples how to make REST API calls in a Bash script, Python and an Angular application.
+* [***SNMP***](snmp) - example showing the use of the ```snmpwalk``` utility.
+* [***Ansible***](ansible) - several examples of [Ansible](https://www.ansible.com/) provisioning automation scripts.
