@@ -1,0 +1,35 @@
+<html>
+<head>
+    <style>
+        #messages {
+            text-align: left;
+            width: 50%;
+            padding: 1em;
+            border: 1px solid black;
+        }
+    </style>
+    <title>Sample WebSocket Client</title>
+</head>
+<body>
+<div class="container">
+    <div id="messages" class="messages"></div>
+</div>
+</body>
+<script>
+    const messageWindow = document.getElementById("messages");
+    const socket = new WebSocket("ws://localhost:8080/random");
+
+    socket.onopen = function (event) {
+        addMessageToWindow("Connected to random number generator.");
+    };
+
+    socket.onmessage = function (event) {
+      addMessageToWindow(event.data);
+    };
+
+    function addMessageToWindow(message) {
+        messageWindow.innerHTML += `<div>${message}</div>`
+    }
+
+</script>
+</html>

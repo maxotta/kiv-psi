@@ -1,0 +1,73 @@
+<html>
+<head>
+    <style>
+        #messages {
+            text-align: left;
+            width: 50%;
+            padding: 1em;
+            border: 1px solid black;
+        }
+    </style>
+    <title>Sample WebSocket Client</title>
+</head>
+<body>
+<div class="container">
+    <div id="messages" class="messages"></div>
+    <div class="input-fields">
+        <p>Enter your nickname:</p>
+        <input id="nickname"/>
+        <button id="join">Join</button>
+        <button id="leave">Leave</button>
+        <p>Type a message and hit send:</p>
+        <input id="message"/>
+        <button id="send">Send</button>
+
+    </div>
+</div>
+</body>
+<script>
+    const messageWindow = document.getElementById("messages");
+
+    const joinButton = document.getElementById("join");
+    const leaveButton = document.getElementById("leave");
+    const nicknameInput = document.getElementById("nickname");
+
+    const sendButton = document.getElementById("send");
+    const messageInput = document.getElementById("message");
+
+    var socket = null;
+
+    joinButton.onclick = function (event) {
+        socket = new WebSocket("ws://localhost:8080/chat/" + nicknameInput.value);
+        addMessageToWindow("(Joining as " + nicknameInput.value + ")");
+        socket.onopen = function (event) {
+            addMessageToWindow("(Connected)");
+        };
+        socket.onmessage = function (event) {
+            addMessageToWindow("* " + event.data);
+        };
+        socket.onclose = function (event) {
+            addMessageToWindow("(Disconnected)");
+        }
+    };
+
+    leaveButton.onclick = function (event) {
+        addMessageToWindow("(Leaving chat)");
+        socket.close();
+        socket = null;
+    };
+
+    sendButton.onclick = function (event) {
+        sendMessage(messageInput.value);
+        messageInput.value = "";
+    };
+
+    function sendMessage(message) {
+        socket.send(message);
+    }
+
+    function addMessageToWindow(message) {
+        messageWindow.innerHTML += `<div>${message}</div>`
+    }
+</script>
+</html>
