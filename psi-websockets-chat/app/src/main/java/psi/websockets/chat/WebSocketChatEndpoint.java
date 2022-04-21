@@ -62,7 +62,7 @@ public class WebSocketChatEndpoint {
             synchronized (endpoint) {
                 try {
                     endpoint.session.getBasicRemote().
-                      sendText(message, true);
+                      sendText(message);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

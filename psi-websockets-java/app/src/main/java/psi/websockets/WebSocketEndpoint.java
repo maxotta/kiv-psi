@@ -22,7 +22,7 @@ public class WebSocketEndpoint {
             count++;
             number = random.nextInt(100);
             message = count + ". => " + number;
-            client.sendText(message, true);
+            client.sendText(message);
             Thread.sleep(1000);
         }
     }
