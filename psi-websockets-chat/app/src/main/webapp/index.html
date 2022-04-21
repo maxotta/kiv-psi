@@ -1,0 +1,97 @@
+<html>
+<head>
+    <style>
+        .messages {
+            text-align: left;
+            width: 50%;
+            padding: 1em;
+            border: 1px solid black;
+            background-color: lightgray;
+        }
+    </style>
+    <title>Sample WebSocket Client - Chat</title>
+</head>
+<body>
+<div class="container">
+    <b>Sample WebSocket Client - Chat</b>
+    <div>
+        <p>
+            Nickname:
+            <input id="nickname"/>
+            <button id="join">Join</button>
+            <button id="leave">Leave</button>
+        </p>
+    </div>
+    <div class="messages">
+        <div id="messages"></div>
+        <input id="message"/>
+        <button id="send">Send</button>
+    </div>
+</div>
+</body>
+<script>
+    const messageWindow = document.getElementById("messages");
+
+    const joinButton = document.getElementById("join");
+    const leaveButton = document.getElementById("leave");
+    const nicknameInput = document.getElementById("nickname");
+
+    const sendButton = document.getElementById("send");
+    const messageInput = document.getElementById("message");
+
+    var socket = null;
+    var loggedIn = false;
+
+    sendButton.disabled = true;
+    messageInput.disabled = true;
+    joinButton.disabled = false;
+    leaveButton.disabled = true;
+
+    joinButton.onclick = function (event) {
+        socket = new WebSocket("ws://localhost:8080/chat/" + nicknameInput.value);
+        clearMessageWindow();
+        addMessageToWindow("(Joining as " + nicknameInput.value + ")");
+        socket.onopen = function (event) {
+            addMessageToWindow("(Connected)");
+            sendButton.disabled = false;
+            messageInput.disabled = false;
+            joinButton.disabled = true;
+            leaveButton.disabled = false;
+        };
+        socket.onmessage = function (event) {
+            addMessageToWindow(event.data);
+        };
+        socket.onclose = function (event) {
+            addMessageToWindow("(Disconnected)");
+            sendButton.disabled = true;
+            messageInput.disabled = true;
+            joinButton.disabled = false;
+            leaveButton.disabled = true;
+        }
+    };
+
+    leaveButton.onclick = function (event) {
+        addMessageToWindow("(Leaving chat)");
+        socket.close();
+        socket = null;
+    };
+
+    sendButton.onclick = function (event) {
+        sendMessage(messageInput.value);
+        messageInput.value = "";
+    };
+
+    function sendMessage(message) {
+        socket.send(message);
+    }
+
+    function addMessageToWindow(message) {
+        messageWindow.innerHTML += `<div>${message}</div>`
+    }
+
+    function clearMessageWindow() {
+        messageWindow.innerHTML = ""
+    }
+
+</script>
+</html>
