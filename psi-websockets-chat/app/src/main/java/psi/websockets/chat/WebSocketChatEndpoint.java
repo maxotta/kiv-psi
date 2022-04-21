@@ -31,14 +31,14 @@ public class WebSocketChatEndpoint {
         users.put(session.getId(), nickname);
 
         String from = users.get(session.getId());
-        broadcast("+ " + from + " has joined the chat.");
+        broadcast("(+) " + from + " has joined the chat.");
     }
 
     @OnMessage
     public void onMessage(Session session, String message) 
       throws IOException {
         String from = users.get(session.getId());
-        broadcast(from + ": " + message);
+        broadcast(" * " + from + ": " + message);
     }
 
     @OnClose
@@ -46,7 +46,7 @@ public class WebSocketChatEndpoint {
  
         chatEndpoints.remove(this);
         String from = users.get(session.getId());
-        broadcast("- " + from + " has left the chat.");
+        broadcast("(-) " + from + " has left the chat.");
         users.remove(session.getId());
     }
 
