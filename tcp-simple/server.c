@@ -47,6 +47,7 @@ int main(int argc, char const* argv[])
         perror("listen");
         exit(EXIT_FAILURE);
     }
+    printf("TCP server listening on port %d.  Waiting for client's message. Press [Ctrl-C] to interrupt.", PORT);
     if ((new_socket
          = accept(server_fd, (struct sockaddr*)&address,
                   &addrlen))
